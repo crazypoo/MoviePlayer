@@ -7,12 +7,16 @@
 //
 
 #import "PooAppDelegate.h"
+#import "PooViewController.h"
 
 @implementation PooAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:[[PooViewController alloc] init]];
+    self.window.rootViewController = mainNav;
+    [self.window makeKeyAndVisible];
     return YES;
 }
 							
