@@ -443,10 +443,10 @@ typedef NS_ENUM(NSInteger, GestureType){
                 _movieProgressSlider.value = progress;
                 _isFirstOpenPlayer = YES;
                 [self scrubbingDidEnd];
-                [_player.currentItem removeObserver:self forKeyPath:@"status" context:nil];
             }
         }
     }
+    [_player.currentItem removeObserver:self forKeyPath:@"status" context:nil];
 //    if ([keyPath isEqualToString:@"loadedTimeRanges"])
 //    {
 //        float bufferTime = [self availableDuration];
