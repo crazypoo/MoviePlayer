@@ -25,12 +25,13 @@
     [camera addTarget:self action:@selector(playNetMovie) forControlEvents:UIControlEventTouchUpInside];
     camera.frame = CGRectMake(0, 100, 100, 100);
     [self.view addSubview:camera];
+    
 }
 
 - (void)playNetMovie
 {
-    NSURL *url = [NSURL URLWithString:@"http://v.youku.com/player/getRealM3U8/vid/XNzAwMTQzOTM2/type/mp4/v.m3u8"];
-    PooPlayMovieViewController *movieVC = [[PooPlayMovieViewController alloc]initNetworkPooPlayMovieViewControllerWithURL:url movieTitle:@"暴走大事件9"];
+    NSURL *url = [NSURL URLWithString:@"http://pl.youku.com/playlist/m3u8?ctype=12&ep=diaVGE%2bIVMwB5CXXjz8bNHi0cCEHXJZ0vESH%2f7YbAMZuNaHQnT%2fWzw%3d%3d&ev=1&keyframe=1&oip=1991941296&sid=441265221168712cdf4f8&token=4178&type=flv&vid=XNzk2NTI0MzMy"];
+    PooPlayMovieViewController *movieVC = [[PooPlayMovieViewController alloc]initNetworkPooPlayMovieViewControllerWithURL:url movieTitle:@"XXXXXXXX"];
     movieVC.datasource = self;
     [self presentViewController:movieVC animated:YES completion:nil];
 }
@@ -62,4 +63,8 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
 @end

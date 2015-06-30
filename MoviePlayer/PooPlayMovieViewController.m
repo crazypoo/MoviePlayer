@@ -558,7 +558,7 @@ typedef NS_ENUM(NSInteger, GestureType){
         if (_isPlaying == YES){
             [_player play];
         }
-//        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionOld context:nil];
     }
 }
 
@@ -631,7 +631,7 @@ typedef NS_ENUM(NSInteger, GestureType){
     if (i != _currentPlayingItem)
     {
         [_player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:(NSURL *)_movieURLList[i]]];
-//        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
         _currentPlayingItem = i;
     }
     temp -= [((NSNumber *)_itemTimeList[i]) doubleValue];
@@ -704,10 +704,12 @@ typedef NS_ENUM(NSInteger, GestureType){
     {
         if (offset_y > 0)
         {
+            NSLog(@"向上");
             [self volumeAdd:-VolumeStep];
         }
         else
         {
+            NSLog(@"向下");
             [self volumeAdd:VolumeStep];
         }
     }
@@ -745,7 +747,8 @@ typedef NS_ENUM(NSInteger, GestureType){
             if (topFrame.origin.y<0)
             {
                 topFrame.origin.y    = 0;
-                bottomFrame.origin.y = self.view.frame.size.width-BottomViewHeight;
+                //TODO:此处有bug
+                bottomFrame.origin.y = 320-BottomViewHeight;
                 [self performSelector:@selector(hidenControlBar) withObject:nil afterDelay:3];
             }
             else
@@ -799,6 +802,19 @@ typedef NS_ENUM(NSInteger, GestureType){
 - (NSUInteger)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskLandscapeRight;
 }
+
+-(void)dealloc
+{
+//    [_player.currentItem removeObserver:self forKeyPath:@"status"];
+    [self removeObserver:self forKeyPath:@"status"];
+    _player = nil;
+}
+
+//-(void)viewWillDisappear:(BOOL)animated
+//{
+//    [_player.currentItem removeObserver:self forKeyPath:@"status"];
+//    [self removeObserver:self forKeyPath:@"status"];
+//}
 
 @end
 
