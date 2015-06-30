@@ -69,6 +69,14 @@ typedef NS_ENUM(NSInteger, GestureType){
 
 @implementation PooPlayMovieViewController
 
+- (void)viewWillDisappear:(BOOL)animated{
+    if(_player.currentItem && _player){
+        [_player.currentItem removeObserver:self forKeyPath:@"status" context:nil];
+
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }
+
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -436,6 +444,7 @@ typedef NS_ENUM(NSInteger, GestureType){
                 _movieProgressSlider.value = progress;
                 _isFirstOpenPlayer = YES;
                 [self scrubbingDidEnd];
+                [_player.currentItem removeObserver:self forKeyPath:@"status" context:nil];
             }
         }
     }
@@ -519,7 +528,7 @@ typedef NS_ENUM(NSInteger, GestureType){
     _movieTitle = [dic objectForKey:KTitleOfMovieDictionary];
     _titleLable.text = _movieTitle;
     //TODO: 檢測通知
-    [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+//    [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
     
     //TODO: 檢測是否有上or下一部電影
     if (_datasource && [_datasource isHaveNextMovie])
@@ -558,7 +567,7 @@ typedef NS_ENUM(NSInteger, GestureType){
         if (_isPlaying == YES){
             [_player play];
         }
-        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionOld context:nil];
+//        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionOld context:nil];
     }
 }
 
@@ -596,6 +605,7 @@ typedef NS_ENUM(NSInteger, GestureType){
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
     
     [self dismissViewControllerAnimated:YES completion:^{
+        [_player.currentItem removeObserver:self forKeyPath:@"status"];
         self.timeObserver = nil;
         self.player = nil;
         [UIScreen mainScreen].brightness = _systemBrightness;
@@ -631,7 +641,7 @@ typedef NS_ENUM(NSInteger, GestureType){
     if (i != _currentPlayingItem)
     {
         [_player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:(NSURL *)_movieURLList[i]]];
-        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+//        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
         _currentPlayingItem = i;
     }
     temp -= [((NSNumber *)_itemTimeList[i]) doubleValue];
@@ -802,20 +812,6 @@ typedef NS_ENUM(NSInteger, GestureType){
 - (NSUInteger)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskLandscapeRight;
 }
-
--(void)dealloc
-{
-//    [_player.currentItem removeObserver:self forKeyPath:@"status"];
-    [self removeObserver:self forKeyPath:@"status"];
-    _player = nil;
-}
-
-//-(void)viewWillDisappear:(BOOL)animated
-//{
-//    [_player.currentItem removeObserver:self forKeyPath:@"status"];
-//    [self removeObserver:self forKeyPath:@"status"];
-//}
-
 @end
 
 #pragma mark --------播放歷史操作
