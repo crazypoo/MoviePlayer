@@ -448,13 +448,13 @@ typedef NS_ENUM(NSInteger, GestureType){
             }
         }
     }
-//        if ([keyPath isEqualToString:@"loadedTimeRanges"])
-//        {
-//            float bufferTime = [self availableDuration];
-//            NSLog(@"缓冲进度%f",bufferTime);
-//            float durationTime = CMTimeGetSeconds([[_player currentItem] duration]);
-//            NSLog(@"缓冲进度：%f , 百分比：%f",bufferTime,bufferTime/durationTime);
-//        }
+//    if ([keyPath isEqualToString:@"loadedTimeRanges"])
+//    {
+//        float bufferTime = [self availableDuration];
+//        NSLog(@"缓冲进度%f",bufferTime);
+//        float durationTime = CMTimeGetSeconds([[_player currentItem] duration]);
+//        NSLog(@"缓冲进度：%f , 百分比：%f",bufferTime,bufferTime/durationTime);
+//    }
 }
 //TODO: 加載進度
 //- (float)availableDuration
@@ -528,7 +528,7 @@ typedef NS_ENUM(NSInteger, GestureType){
     _movieTitle = [dic objectForKey:KTitleOfMovieDictionary];
     _titleLable.text = _movieTitle;
     //TODO: 檢測通知
-//    [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+    [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
     
     //TODO: 檢測是否有上or下一部電影
     if (_datasource && [_datasource isHaveNextMovie])
@@ -567,7 +567,7 @@ typedef NS_ENUM(NSInteger, GestureType){
         if (_isPlaying == YES){
             [_player play];
         }
-//        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionOld context:nil];
+        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionOld context:nil];
     }
 }
 
@@ -628,6 +628,7 @@ typedef NS_ENUM(NSInteger, GestureType){
     if (_mode == PooPlayMovieViewControllerModeNetwork)
     {
         [_progressHUD show:YES];
+        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
     }
     double currentTime = floor(_movieLength *_movieProgressSlider.value);
     
@@ -641,7 +642,7 @@ typedef NS_ENUM(NSInteger, GestureType){
     if (i != _currentPlayingItem)
     {
         [_player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:(NSURL *)_movieURLList[i]]];
-//        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
         _currentPlayingItem = i;
     }
     temp -= [((NSNumber *)_itemTimeList[i]) doubleValue];
