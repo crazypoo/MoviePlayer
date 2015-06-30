@@ -72,7 +72,6 @@ typedef NS_ENUM(NSInteger, GestureType){
 - (void)viewWillDisappear:(BOOL)animated{
     if(_player.currentItem && _player){
         [_player.currentItem removeObserver:self forKeyPath:@"status" context:nil];
-
         [[NSNotificationCenter defaultCenter] removeObserver:self];
     }
 
@@ -561,13 +560,14 @@ typedef NS_ENUM(NSInteger, GestureType){
 {
     if (_currentPlayingItem+1 == _movieURLList.count) {
         [self popView];
+        [_player.currentItem removeObserver:self forKeyPath:@"status" context:nil];
     }else{
         ++_currentPlayingItem;
         [_player replaceCurrentItemWithPlayerItem:[AVPlayerItem playerItemWithURL:_movieURLList[_currentPlayingItem]]];
         if (_isPlaying == YES){
             [_player play];
         }
-        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionOld context:nil];
+//        [_player.currentItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionOld context:nil];
     }
 }
 
@@ -702,11 +702,11 @@ typedef NS_ENUM(NSInteger, GestureType){
     {
         if (offset_x > 0)
         {
-            NSLog(@"向右");
+            NSLog(@"快进");
             _movieProgressSlider.value += 0.005;
         }else
         {
-            NSLog(@"向左");
+            NSLog(@"后退");
             _movieProgressSlider.value -= 0.005;
         }
         [self updateProfressTimeLable];
@@ -715,12 +715,12 @@ typedef NS_ENUM(NSInteger, GestureType){
     {
         if (offset_y > 0)
         {
-            NSLog(@"向上");
+            NSLog(@"音量减");
             [self volumeAdd:-VolumeStep];
         }
         else
         {
-            NSLog(@"向下");
+            NSLog(@"音量加");
             [self volumeAdd:VolumeStep];
         }
     }
@@ -728,11 +728,13 @@ typedef NS_ENUM(NSInteger, GestureType){
     {
         if (offset_y > 0)
         {
+            NSLog(@"变暗");
             _brightnessView.alpha = 1;
             [self brightnessAdd:-BrightnessStep];
         }
         else
         {
+            NSLog(@"变光");
             _brightnessView.alpha = 1;
             [self brightnessAdd:BrightnessStep];
         }
