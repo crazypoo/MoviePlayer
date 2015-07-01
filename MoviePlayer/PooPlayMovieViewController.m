@@ -768,7 +768,6 @@ typedef NS_ENUM(NSInteger, GestureType){
             if (topFrame.origin.y<0)
             {
                 topFrame.origin.y    = 0;
-                //TODO:此处有bug
                 float bF = 0;
                 if (INTERFACE_IS_PAD) {
                     bF = screenWidth;

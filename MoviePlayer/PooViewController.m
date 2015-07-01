@@ -10,7 +10,7 @@
 #import "PooPlayMovieViewController.h"
 
 @interface PooViewController ()<PooPlayMovieViewControllerDataSource>
-
+@property(nonatomic)NSUInteger orietation;
 @end
 
 @implementation PooViewController
@@ -25,6 +25,7 @@
     [camera addTarget:self action:@selector(playNetMovie) forControlEvents:UIControlEventTouchUpInside];
     camera.frame = CGRectMake(0, 100, 100, 100);
     [self.view addSubview:camera];
+    
     
 }
 
@@ -51,6 +52,7 @@
     NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[NSURL URLWithString:@"http://v.youku.com/player/getRealM3U8/vid/XNzAwMTQzOTM2/type/mp4/v.m3u8"],KURLOfMovieDicTionary,@"qqqqqqq",KTitleOfMovieDictionary, nil];
     return dic;
 }
+
 
 - (NSDictionary *)nextMovieURLAndTitleToTheCurrentMovie
 {
