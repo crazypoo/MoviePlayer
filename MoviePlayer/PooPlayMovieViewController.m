@@ -16,6 +16,14 @@
 #define VolumeStep        0.02f
 #define BrightnessStep    0.02f
 #define MovieProgressStep 5.0f
+#define INTERFACE_IS_PAD [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad
+#define INTERFACE_IS_PHONE   ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
+#define iPhone4 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+#define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
+#define iPhone6 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1334), [[UIScreen mainScreen] currentMode].size) : NO)
+#define iPhone6P ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2208), [[UIScreen mainScreen] currentMode].size) : NO)
+#define screenWidth ([UIScreen mainScreen].bounds.size.width)
+#define screenHeight ([UIScreen mainScreen].bounds.size.height)
 
 #define IOS7 ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending)
 
@@ -172,7 +180,7 @@ typedef NS_ENUM(NSInteger, GestureType){
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"firstStart"]){
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"firstStart"];
         //TODO: 引導頁面
-        UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
+        UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, screenHeight, screenWidth)];
         btn.contentMode = UIViewContentModeScaleAspectFill;
         if (self.view.frame.size.height>500)
         {
@@ -761,13 +769,32 @@ typedef NS_ENUM(NSInteger, GestureType){
             {
                 topFrame.origin.y    = 0;
                 //TODO:此处有bug
-                bottomFrame.origin.y = 320-BottomViewHeight;
+                float bF = 0;
+                if (INTERFACE_IS_PAD) {
+                    bF = screenWidth;
+                }
+                else
+                {
+                    if (iPhone6) {
+                        bF = screenWidth;
+                    }
+                    else if (iPhone6P)
+                    {
+                        bF = screenWidth;
+                    }
+                    else
+                    {
+                        bF = screenHeight;
+                    }
+                }
+                bottomFrame.origin.y = bF-BottomViewHeight;
+
                 [self performSelector:@selector(hidenControlBar) withObject:nil afterDelay:3];
             }
             else
             {
                 topFrame.origin.y    = -TopViewHeight;
-                bottomFrame.origin.y = self.view.frame.size.width;
+                bottomFrame.origin.y = screenWidth;
             }
             _topView.frame    = topFrame;
             _bottomView.frame = bottomFrame;
