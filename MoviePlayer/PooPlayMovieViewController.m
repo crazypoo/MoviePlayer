@@ -16,12 +16,6 @@
 #define VolumeStep        0.02f
 #define BrightnessStep    0.02f
 #define MovieProgressStep 5.0f
-#define INTERFACE_IS_PAD [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad
-#define INTERFACE_IS_PHONE   ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-#define iPhone4 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
-#define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
-#define iPhone6 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1334), [[UIScreen mainScreen] currentMode].size) : NO)
-#define iPhone6P ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2208), [[UIScreen mainScreen] currentMode].size) : NO)
 #define screenWidth ([UIScreen mainScreen].bounds.size.width)
 #define screenHeight ([UIScreen mainScreen].bounds.size.height)
 
@@ -768,25 +762,8 @@ typedef NS_ENUM(NSInteger, GestureType){
             if (topFrame.origin.y<0)
             {
                 topFrame.origin.y    = 0;
-                float bF = 0;
-                if (INTERFACE_IS_PAD) {
-                    bF = screenWidth;
-                }
-                else
-                {
-                    if (iPhone6) {
-                        bF = screenWidth;
-                    }
-                    else if (iPhone6P)
-                    {
-                        bF = screenWidth;
-                    }
-                    else
-                    {
-                        bF = screenHeight;
-                    }
-                }
-                bottomFrame.origin.y = bF-BottomViewHeight;
+                
+                bottomFrame.origin.y = screenHeight-BottomViewHeight;
 
                 [self performSelector:@selector(hidenControlBar) withObject:nil afterDelay:3];
             }
